@@ -1,0 +1,28 @@
+{
+    "Version": "1.00",
+    "Sections": [
+        {
+            "Name": "General",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Name": "Scale By Level",
+                    "Description": "Amount required for bribes scales with the players level",
+                    "Value": true,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+                {
+                    "Name": "Base Bribe Amount",
+                    "Description": "The starting amount required for a bribe before scaling",
+                    "Value": 5,
+                    "Min": 5,
+                    "Max": 50,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
+                }
+            ],
+            "$version": "v1"
+        }
+    ]
+}

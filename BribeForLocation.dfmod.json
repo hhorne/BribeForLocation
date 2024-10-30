@@ -1,0 +1,16 @@
+{
+    "ModTitle": "BribeForLocation",
+    "ModVersion": "0.0.1",
+    "ModAuthor": "Tron_Travolta",
+    "DFUnity_Version": "1.1.1",
+    "ModDescription": "Bribe certain NPCs to mark locations on your map.",
+    "GUID": "f0df4a7d-506c-4862-a15a-a469313e01e6",
+    "Files": [
+        "Assets/Game/Mods/BribeForLocation/Scripts/Main.cs",
+        "Assets/Game/Mods/BribeForLocation/Scripts/NobleResponses.cs",
+        "Assets/Game/Mods/BribeForLocation/Scripts/BribeableTalkWindow.cs",
+        "Assets/Game/Mods/BribeForLocation/Textures/Img/TALK02I0.IMG.png",
+        "Assets/Game/Mods/BribeForLocation/Textures/Img/TALK01I0.IMG.png",
+        "Assets/Game/Mods/BribeForLocation/modsettings.json"
+    ]
+}
