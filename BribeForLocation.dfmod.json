@@ -9,7 +9,6 @@
         "Assets/Game/Mods/BribeForLocation/Scripts/Main.cs",
         "Assets/Game/Mods/BribeForLocation/Scripts/NobleResponses.cs",
         "Assets/Game/Mods/BribeForLocation/Scripts/BribeableTalkWindow.cs",
-        "Assets/Game/Mods/BribeForLocation/Textures/Img/TALK02I0.IMG.png",
         "Assets/Game/Mods/BribeForLocation/Textures/Img/TALK01I0.IMG.png",
         "Assets/Game/Mods/BribeForLocation/modsettings.json"
     ]
