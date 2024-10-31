@@ -38,7 +38,6 @@ namespace BribeForLocation
         {
             Settings = new BribeSettings
             {
-                EnableGetNPCData = modSettings.GetBool("Experimental", "Get NPC Data"),
                 EnableNPCKnowledge = modSettings.GetBool("Experimental", "NPC Knowledge"),
                 ScaleByLevel = modSettings.GetBool("General", "Scale By Level"),
                 StartingBribeAmount = modSettings.GetInt("General", "Base Bribe Amount"),

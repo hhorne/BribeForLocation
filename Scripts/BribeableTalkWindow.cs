@@ -6,6 +6,8 @@ using System;
 using System.Linq;
 using DaggerfallConnect.Arena2;
 using System.Reflection;
+using DaggerfallConnect;
+using static DaggerfallWorkshop.Game.TalkManager;
 
 namespace BribeForLocation
 {
@@ -13,6 +15,7 @@ namespace BribeForLocation
     {
         protected Button buttonBribe;
 
+        bool IsTalkingToStaticNPC => TalkManager.Instance.StaticNPC != null;
         bool IsLocationSelected => selectedTalkCategory == TalkCategory.Location;
         bool IsWhereIsSelected => selectedTalkOption == TalkOption.WhereIs;
         TalkManager.ListItem CurrentTopic => listCurrentTopics[listboxTopic.SelectedIndex];
@@ -44,22 +47,23 @@ namespace BribeForLocation
             };
 
             var talkManager = TalkManager.Instance;
+            var gameManager = GameManager.Instance;
             buttonBribe.OnMouseClick += (BaseScreenComponent sender, Vector2 position) =>
             {
                 if (!IsLocationTopic(CurrentTopic))
                     return;
 
-                currentQuestion = talkManager.GetQuestionText(CurrentTopic, selectedTalkTone);
                 string answer = string.Empty;
+                currentQuestion = talkManager.GetQuestionText(CurrentTopic, selectedTalkTone);
 
-                if (Settings.EnableGetNPCData)
+                if (IsTalkingToStaticNPC)
                 {
-                    var npc = GetNPCData();
-                    if (npc.socialGroup == FactionFile.SocialGroups.Nobility)
+                    var npc = GetStaticNPCData();
+                    if (IsNoble(npc))
                     {
                         answer = NobleResponses.GetRandomRejection();
                     }
-                    else if (respectableOrders.Contains(npc.guildGroup))
+                    else if (IsSwornToAnOrder(npc))
                     {
                         answer = "Are you trying to insult me?";
                     }
@@ -128,6 +132,16 @@ namespace BribeForLocation
             return bribeAmount;
         }
 
+        private bool IsNoble(NPCData npc)
+        {
+            return npc.socialGroup == FactionFile.SocialGroups.Nobility;
+        }
+
+        private bool IsSwornToAnOrder(NPCData npc)
+        {
+            return respectableOrders.Contains(npc.guildGroup);
+        }
+
         static BindingFlags nonPublicInstance = BindingFlags.NonPublic | BindingFlags.Instance;
         private bool DoesNPCKnowAboutItem(TalkManager.ListItem listItem)
         {
@@ -157,28 +171,51 @@ namespace BribeForLocation
             return knowledge == TalkManager.NPCKnowledgeAboutItem.KnowsAboutItem;
         }
 
-        private TalkManager.NPCData GetNPCData()
+        /// <summary>
+        /// Combination of code from:
+        ///     - TalkManager.GetStaticNPCFactionData
+        ///     - TalkManager.SetTargetNPC
+        /// Get NPCData for the currently selected StaticNPC.
+        /// </summary>
+        /// <param name="factionId">The NPC faction ID.</param>
+        /// <param name="buildingType">The NPC location building type.</param>
+        private NPCData GetStaticNPCData()
         {
-            if (!Settings.EnableGetNPCData)
+            var talkManager = TalkManager.Instance;
+            var gameManager = GameManager.Instance;
+            var factionId = talkManager.StaticNPC.Data.factionID;
+            var buildingType = GameManager.Instance.PlayerEnterExit.BuildingType;
+
+            if (factionId == 0)
             {
-                throw new Exception("[Dennis Nedry voice: Ah, ah, aaah!");
+                // Matched to classic: an NPC with a null faction id is assigned to court or people of current region
+                if (buildingType == DFLocation.BuildingTypes.Palace)
+                    factionId = GameManager.Instance.PlayerGPS.GetCourtOfCurrentRegion();
+                else
+                    factionId = GameManager.Instance.PlayerGPS.GetPeopleOfCurrentRegion();
+            }
+            else if (factionId == (int)FactionFile.FactionIDs.Random_Ruler ||
+                     factionId == (int)FactionFile.FactionIDs.Random_Noble ||
+                     factionId == (int)FactionFile.FactionIDs.Random_Knight)
+            {
+                // Change from classic: use "Court of" current region for Random Ruler, Random Noble
+                // and Random Knight because these generic factions have no use at all
+                factionId = GameManager.Instance.PlayerGPS.GetCourtOfCurrentRegion();
             }
 
-            var talkManager = TalkManager.Instance;
-            TalkManager.NPCData npcData;
-            try
+            FactionFile.FactionData factionData;
+            GameManager.Instance.PlayerEntity.FactionData.GetFactionData(factionId, out factionData);
+
+            var npcData = new NPCData
             {
-                npcData = (TalkManager.NPCData)talkManager
-                    .GetType()
-                    .GetField("npcData", nonPublicInstance)
-                    .GetValue(talkManager);
-            }
-            catch (Exception e)
-            {
-                npcData = new TalkManager.NPCData();
-                Debug.Log(e.Message);
-                Debug.Log(e.InnerException);
-            }
+                socialGroup = factionData.sgroup < 5
+                    ? (FactionFile.SocialGroups)factionData.sgroup
+                    : FactionFile.SocialGroups.Merchants,
+                guildGroup = (FactionFile.GuildGroups)factionData.ggroup,
+                factionData = factionData,
+                race = TalkManager.Instance.StaticNPC.Data.race,
+                isSpyMaster = false
+            };
 
             return npcData;
         }
