@@ -6,15 +6,8 @@
             "IsAdvanced": false,
             "Keys": [
                 {
-                    "Name": "Scale By Level",
-                    "Description": "Amount required for bribes scales with the players level",
-                    "Value": true,
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                },
-                {
                     "Name": "Base Bribe Amount",
-                    "Description": "The starting amount required for a bribe before scaling",
+                    "Description": "The starting amount required for a bribe before scaling.",
                     "Value": 5,
                     "Min": 5,
                     "Max": 50,
@@ -22,34 +15,28 @@
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
                 },
                 {
-                    "Name": "Influenced By Personality",
-                    "Description": "Personality can decrease (or increase) the amount required for a bribe.",
-                    "Value": false,
-                    "$version": "v1",
-                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                }
-            ],
-            "$version": "v1"
-        },
-        {
-            "Name": "Experimental",
-            "Description": "Disable if use of this mod causes the game to error or crash. Experimental Features use a .NET technique known as Reflection that may not run correctly on all platforms.",
-            "IsAdvanced": false,
-            "Keys": [
-                {
-                    "Name": "Get NPC Data",
-                    "Description": "Enables advanced NPC data, useful for more complex responses.",
-                    "Value": false,
+                    "Name": "Scale By Level",
+                    "Description": "Amount required for bribes scales with the players level.",
+                    "Value": true,
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 },
                 {
-                    "Name": "NPC Knowledge",
-                    "Description": "Enables the ability to access existing NPC knowledge checks.",
+                    "Name": "Amount To Scale By",
+                    "Description": "How drastically to scale the bribe amount per level.",
+                    "Value": 0.5,
+                    "Min": 0,
+                    "Max": 4,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
+                },
+                /*{
+                    "Name": "Influenced By Personality",
+                    "Description": "[Not Implemented] Personality can decrease (or increase) the amount required for a bribe.",
                     "Value": false,
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                }
+                }*/
             ],
             "$version": "v1"
         }

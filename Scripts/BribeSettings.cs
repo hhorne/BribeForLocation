@@ -5,7 +5,6 @@ using UnityEngine;
 public class BribeSettings
 {
     public bool ScaleByLevel { get; set; }
-    public bool PersonalityInfluenceAmount { get; set; }
+    public float AmountToScaleBy { get; set; }
     public int StartingBribeAmount { get; set; }
-    public bool EnableNPCKnowledge { get; set; }
 }

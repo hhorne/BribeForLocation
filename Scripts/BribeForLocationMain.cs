@@ -6,14 +6,13 @@ using DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings;
 
 namespace BribeForLocation
 {
-    public class Main : MonoBehaviour
+    public class BribeForLocationMain : MonoBehaviour
     {
         private static Mod mod;
-        private static Main instance;
+        private static BribeForLocationMain instance;
 
         public static BribeSettings Settings { get; private set; }
-        public string Title => mod.Title ?? "BribeForLocation";
-        public static Main Instance => instance ?? (instance = FindObjectOfType<Main>());
+        public static BribeForLocationMain Instance => instance ?? (instance = FindObjectOfType<BribeForLocationMain>());
 
         [Invoke(StateManager.StateTypes.Start, 0)]
         public static void Init(InitParams initParams)
@@ -21,7 +20,7 @@ namespace BribeForLocation
             mod = initParams.Mod;
 
             instance = new GameObject(mod.Title)
-                .AddComponent<Main>();
+                .AddComponent<BribeForLocationMain>();
 
             mod.LoadSettingsCallback = LoadSettings;
 
@@ -38,8 +37,8 @@ namespace BribeForLocation
         {
             Settings = new BribeSettings
             {
-                EnableNPCKnowledge = modSettings.GetBool("Experimental", "NPC Knowledge"),
                 ScaleByLevel = modSettings.GetBool("General", "Scale By Level"),
+                AmountToScaleBy = modSettings.GetFloat("General", "Amount To Scale By"),
                 StartingBribeAmount = modSettings.GetInt("General", "Base Bribe Amount"),
             };
         }
