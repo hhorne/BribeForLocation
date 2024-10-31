@@ -16,8 +16,7 @@ namespace BribeForLocation
         bool IsLocationSelected => selectedTalkCategory == TalkCategory.Location;
         bool IsWhereIsSelected => selectedTalkOption == TalkOption.WhereIs;
         TalkManager.ListItem CurrentTopic => listCurrentTopics[listboxTopic.SelectedIndex];
-        bool scaleByLevel => BribeForLocation.Main.ScaleByLevel;
-        int bribeAmount => BribeForLocation.Main.BribeAmount;
+        BribeSettings Settings => Main.Settings;
 
         readonly FactionFile.GuildGroups[] respectableOrders = new[]
         {
@@ -52,33 +51,38 @@ namespace BribeForLocation
 
                 currentQuestion = talkManager.GetQuestionText(CurrentTopic, selectedTalkTone);
                 string answer = string.Empty;
-                var npc = GetNPCData();
-                bool inSameGuild = GameManager
-                    .Instance
-                    .GuildManager
-                    .GetGuild(npc.guildGroup)
-                    .IsMember();
 
-                if (npc.socialGroup == FactionFile.SocialGroups.Nobility)
+                if (Settings.EnableGetNPCData)
                 {
-                    answer = NobleResponses.GetRandomRejection();
+                    var npc = GetNPCData();
+                    if (npc.socialGroup == FactionFile.SocialGroups.Nobility)
+                    {
+                        answer = NobleResponses.GetRandomRejection();
+                    }
+                    else if (respectableOrders.Contains(npc.guildGroup))
+                    {
+                        answer = "Are you trying to insult me?";
+                    }
                 }
-                else if (respectableOrders.Contains(npc.guildGroup))
+                else if(Settings.EnableNPCKnowledge)
                 {
-                    answer = "Are you trying to insult me?";
+                    if (DoesNPCKnowAboutItem(CurrentTopic))
+                    {
+                        // add entries into the tokens(??) into the subrecords(??)
+                        // so that i can expand custom macros when bribes are rejected.
+                        answer = TakeBribe()
+                            ? talkManager.GetKeySubjectBuildingOnMap()
+                            : "You, ah...seem to be a few Septims short...";
+                    }
+                    else // they don't know
+                    {
+                        answer = talkManager.GetAnswerWhereIs(CurrentTopic);
+                    }
                 }
-                else if(DoesNPCKnowAboutItem(CurrentTopic))
+                else
                 {
-                    // add entries into the tokens(??) into the subrecords(??)
-                    // so that i can expand custom macros when bribes are rejected.
-                    answer = TakeBribe()
-                        ? talkManager.GetKeySubjectBuildingOnMap()
-                        : "You, ah...seem to be a few Septims short...";
-
-                }
-                else // they don't know
-                {
-                    answer = talkManager.GetAnswerWhereIs(CurrentTopic);
+                    TakeBribe();
+                    answer = talkManager.GetKeySubjectBuildingOnMap();
                 }
 
                 SetQuestionAnswerPairInConversationListbox(currentQuestion, answer);
@@ -101,14 +105,9 @@ namespace BribeForLocation
 
         private bool TakeBribe()
         {
-            var playerLevel = GameManager.Instance.PlayerEntity.Level;
             var playerSeptims = GameManager.Instance.PlayerEntity.GoldPieces;
-            int amountRequired = scaleByLevel
-                ? Mathf.RoundToInt(bribeAmount * (1 + (playerLevel * 0.5f)))
-                : bribeAmount;
+            int amountRequired = GetBribeAmount();
 
-            Debug.Log("Bribe amount: " + amountRequired);
-            Debug.Log("Scaled?: " + scaleByLevel);
             if (amountRequired > playerSeptims)
                 return false;
 
@@ -116,9 +115,27 @@ namespace BribeForLocation
             return true;
         }
 
+        private int GetBribeAmount()
+        {
+            int bribeAmount = Settings.StartingBribeAmount;
+
+            if (Settings.ScaleByLevel)
+            {
+                var playerLevel = GameManager.Instance.PlayerEntity.Level;
+                bribeAmount = Mathf.RoundToInt(bribeAmount * (1 + (playerLevel * 0.5f)));
+            }
+
+            return bribeAmount;
+        }
+
         static BindingFlags nonPublicInstance = BindingFlags.NonPublic | BindingFlags.Instance;
         private bool DoesNPCKnowAboutItem(TalkManager.ListItem listItem)
         {
+            if (!Settings.EnableNPCKnowledge)
+            {
+                throw new Exception("[Dennis Nedry voice: Ah, ah, aaah!");
+            }
+
             string invokedResult = string.Empty;
             TalkManager.NPCKnowledgeAboutItem knowledge;
             try
@@ -142,6 +159,11 @@ namespace BribeForLocation
 
         private TalkManager.NPCData GetNPCData()
         {
+            if (!Settings.EnableGetNPCData)
+            {
+                throw new Exception("[Dennis Nedry voice: Ah, ah, aaah!");
+            }
+
             var talkManager = TalkManager.Instance;
             TalkManager.NPCData npcData;
             try

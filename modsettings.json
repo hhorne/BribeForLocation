@@ -20,6 +20,35 @@
                     "Max": 50,
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
+                },
+                {
+                    "Name": "Influenced By Personality",
+                    "Description": "Personality can decrease (or increase) the amount required for a bribe.",
+                    "Value": false,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                }
+            ],
+            "$version": "v1"
+        },
+        {
+            "Name": "Experimental",
+            "Description": "Disable if use of this mod causes the game to error or crash. Experimental Features use a .NET technique known as Reflection that may not run correctly on all platforms.",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Name": "Get NPC Data",
+                    "Description": "Enables advanced NPC data, useful for more complex responses.",
+                    "Value": false,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                },
+                {
+                    "Name": "NPC Knowledge",
+                    "Description": "Enables the ability to access existing NPC knowledge checks.",
+                    "Value": false,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 }
             ],
             "$version": "v1"

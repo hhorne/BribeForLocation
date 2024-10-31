@@ -11,9 +11,7 @@ namespace BribeForLocation
         private static Mod mod;
         private static Main instance;
 
-        public static bool ScaleByLevel { get; private set; }
-        public static int BribeAmount { get; private set; }
-
+        public static BribeSettings Settings { get; private set; }
         public string Title => mod.Title ?? "BribeForLocation";
         public static Main Instance => instance ?? (instance = FindObjectOfType<Main>());
 
@@ -38,8 +36,13 @@ namespace BribeForLocation
 
         private static void LoadSettings(ModSettings modSettings, ModSettingsChange change)
         {
-            ScaleByLevel = modSettings.GetBool("General", "Scale By Level");
-            BribeAmount = modSettings.GetInt("General", "Base Bribe Amount");
+            Settings = new BribeSettings
+            {
+                EnableGetNPCData = modSettings.GetBool("Experimental", "Get NPC Data"),
+                EnableNPCKnowledge = modSettings.GetBool("Experimental", "NPC Knowledge"),
+                ScaleByLevel = modSettings.GetBool("General", "Scale By Level"),
+                StartingBribeAmount = modSettings.GetInt("General", "Base Bribe Amount"),
+            };
         }
     }
 }
