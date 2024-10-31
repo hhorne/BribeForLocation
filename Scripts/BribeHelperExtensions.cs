@@ -14,7 +14,7 @@ using DaggerfallWorkshop;
 public static class BribeHelperExtensions
 {
     /// <summary>
-    /// Sword Orders where members are likely to have their honor insulted
+    /// Sworn Orders where members are likely to have their honor insulted
     /// by being offered a bribe.
     /// </summary>
     public static readonly FactionFile.GuildGroups[] SacredOrders = new[]
