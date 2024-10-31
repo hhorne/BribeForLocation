@@ -119,12 +119,23 @@ namespace BribeForLocation
         static BindingFlags nonPublicInstance = BindingFlags.NonPublic | BindingFlags.Instance;
         private bool DoesNPCKnowAboutItem(TalkManager.ListItem listItem)
         {
-            var invokedResult = typeof(TalkManager)
-                .GetMethod("GetNPCKnowledgeAboutItem", nonPublicInstance)
-                .Invoke(TalkManager.Instance, new[] { listItem })
-                .ToString();
+            string invokedResult = string.Empty;
+            TalkManager.NPCKnowledgeAboutItem knowledge;
+            try
+            {
+                invokedResult = typeof(TalkManager)
+                    .GetMethod("GetNPCKnowledgeAboutItem", nonPublicInstance)
+                    .Invoke(TalkManager.Instance, new[] { listItem })
+                    .ToString();
 
-            Enum.TryParse(invokedResult, out TalkManager.NPCKnowledgeAboutItem knowledge);
+                Enum.TryParse(invokedResult, out knowledge);
+            }
+            catch (Exception e)
+            {
+                knowledge = TalkManager.NPCKnowledgeAboutItem.NotSet;
+                Debug.Log(e.Message);
+                Debug.Log(e.InnerException);
+            }
 
             return knowledge == TalkManager.NPCKnowledgeAboutItem.KnowsAboutItem;
         }
@@ -132,10 +143,22 @@ namespace BribeForLocation
         private TalkManager.NPCData GetNPCData()
         {
             var talkManager = TalkManager.Instance;
-            return (TalkManager.NPCData)talkManager
-                .GetType()
-                .GetField("npcData", nonPublicInstance)
-                .GetValue(talkManager);
+            TalkManager.NPCData npcData;
+            try
+            {
+                npcData = (TalkManager.NPCData)talkManager
+                    .GetType()
+                    .GetField("npcData", nonPublicInstance)
+                    .GetValue(talkManager);
+            }
+            catch (Exception e)
+            {
+                npcData = new TalkManager.NPCData();
+                Debug.Log(e.Message);
+                Debug.Log(e.InnerException);
+            }
+
+            return npcData;
         }
     }
 }
