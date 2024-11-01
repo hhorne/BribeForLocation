@@ -8,6 +8,7 @@ namespace DaggerfallWorkshop.Game
     {
         bool IsTalkingToStaticNPC => StaticNPC != null;
         bool IsTalkingToMobileNPC => MobileNPC != null;
+        float guardBribeDifficulty = 1.2f;
 
         public string BribeNPC(ListItem currentTopic)
         {
@@ -28,16 +29,26 @@ namespace DaggerfallWorkshop.Game
             }
             else if (IsTalkingToMobileNPC)
             {
-                // good faction data to check for flavor
-                // bool isGuard = talkManager.MobileNPC.IsGuard;
-                // var npc = talkManager.MobileNPC.GetNPCData();
-                if (DoesNPCKnowAboutItem(currentTopic))
+                var personalityMod = GameManager.Instance.PlayerEntity.Stats.LivePersonality * 0.1f;
+                if (MobileNPC.IsGuard)
                 {
-                    // add entries into the tokens(??) in the subrecords(??)
+                    var roll = Random.Range(0.0f, 1.5f) + personalityMod;
+                    if (roll >= guardBribeDifficulty)
+                    {
+                        answer = GetBribeAnswer(bribeSystem);
+                    }
+                    else
+                    {
+                        bribeSystem.TakeBribe();
+                        answer = "Out of here before I box your ears and haul you in, welp!";
+                    }
+                }
+                else if (DoesNPCKnowAboutItem(currentTopic))
+                {
+                    var npc = MobileNPC.GetNPCData();
+                    // see if i add entries into the tokens(??) in the subrecords(??)
                     // so that i can expand custom macros when bribes are rejected.
-                    answer = bribeSystem.TakeBribe()
-                        ? GetKeySubjectBuildingOnMap()
-                        : "You, ah...seem to be a few Septims short...";
+                    answer = GetBribeAnswer(bribeSystem);
                 }
                 else // they don't know
                 {
@@ -46,6 +57,13 @@ namespace DaggerfallWorkshop.Game
             }
 
             return answer;
+        }
+
+        private string GetBribeAnswer(BribeSystem bribeSystem)
+        {
+            return bribeSystem.TakeBribe()
+                ? GetKeySubjectBuildingOnMap()
+                : "You, ah...seem to be a few Septims short...";
         }
 
         private bool DoesNPCKnowAboutItem(ListItem currentTopic)
