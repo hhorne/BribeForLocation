@@ -29,10 +29,18 @@ public class BribeSystem
     {
         var bribeAmount = GetBribeAmount();
 
-        if (bribeAmount > player.GoldPieces)
-            return false;
+        if (CanBribe())
+        {
+            player.GoldPieces -= bribeAmount;
+            return true;
+        }
 
-        player.GoldPieces -= bribeAmount;
-        return true;
+        return false;
+    }
+
+    public bool CanBribe()
+    {
+        var bribeAmount = GetBribeAmount();
+        return bribeAmount > player.GoldPieces;
     }
 }
