@@ -10,6 +10,7 @@ namespace BribeForLocation
     {
         private static Mod mod;
         private static BribeForLocationMain instance;
+        public Texture2D BribeButtonEnabledTexture { get; private set; }
 
         public static BribeSettings Settings { get; private set; }
         public static BribeForLocationMain Instance => instance ?? (instance = FindObjectOfType<BribeForLocationMain>());
@@ -23,6 +24,8 @@ namespace BribeForLocation
                 .AddComponent<BribeForLocationMain>();
 
             mod.LoadSettingsCallback = LoadSettings;
+
+            instance.BribeButtonEnabledTexture = mod.GetAsset<Texture2D>("Textures\\bribe-button-enabled");
 
             mod.IsReady = true;
         }

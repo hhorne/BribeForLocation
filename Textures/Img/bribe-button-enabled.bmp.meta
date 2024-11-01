@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5b44666a222c7b2479678d9a2a9bfd8a
+guid: addb90906ff98704f90806f300f3b918
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -20,7 +20,7 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
-  isReadable: 1
+  isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
@@ -100,5 +100,5 @@ TextureImporter:
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
   userData: 
-  assetBundleName: 
+  assetBundleName: bribeforlocation
   assetBundleVariant: 

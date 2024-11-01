@@ -10,9 +10,8 @@ namespace DaggerfallWorkshop.Game
         bool IsTalkingToMobileNPC => MobileNPC != null;
         float guardBribeDifficulty = 1.2f;
 
-        public string BribeNPC(ListItem currentTopic)
+        public string BribeNPC(ListItem currentTopic, BribeSystem bribeSystem)
         {
-            var bribeSystem = new BribeSystem(GameManager.Instance.PlayerEntity);
             string answer = string.Empty;
 
             if (IsTalkingToStaticNPC)
