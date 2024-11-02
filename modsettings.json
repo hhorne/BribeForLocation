@@ -39,6 +39,46 @@
                 }*/
             ],
             "$version": "v1"
+        },
+        {
+            "Name": "Additional Fees",
+            "IsAdvanced": false,
+            "Description": "Adds a premium for more specialized information",
+            "Keys": [
+                {
+                    "Name": "People Fee",
+                    "Description": "When asking NPCs about specific people.",
+                    "Value": 5,
+                    "Min": 0,
+                    "Max": 50,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
+                },
+                {
+                    "Name": "Work Fee",
+                    "Description": "When asking NPCs about any work.",
+                    "Value": 5,
+                    "Min": 0,
+                    "Max": 50,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
+                }
+            ],
+            "$version": "v1"
+        },
+        {
+            "Name": "Experimental",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Name": "Enable Knowledge Check",
+                    "Description": "Enables native NPC knowledge using dotnet reflection to parts of the games code that wouldn't normally be reusable.",
+                    "Value": false,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+                }
+            ],
+            "$version": "v1"
         }
     ]
 }

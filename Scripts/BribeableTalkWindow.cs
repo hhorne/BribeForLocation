@@ -3,19 +3,17 @@ using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.UserInterface;
 using DaggerfallWorkshop.Game.UserInterfaceWindows;
 using DaggerfallWorkshop.Utility.AssetInjection;
-using System.IO;
 
 namespace BribeForLocation
 {
     public class BribeableTalkWindow : DaggerfallTalkWindow
     {
         protected Button buttonBribe;
-        protected string bribeButtonEnabledImgName = "bribe-button-enabled";
+        protected string bribeButtonEnabledImgName = "bribe-button-enabled.bmp";
         protected string bribeButtonDisabledImgName = "bribe-button-disabled.bmp";
         protected Texture2D bribeButtonHighlightedTexture;
         protected Texture2D bribeButtonGrayedOutTexture;
 
-        TalkManager.ListItem CurrentTopic => listCurrentTopics[listboxTopic.SelectedIndex];
         BribeSystem bribeSystem;
 
         public BribeableTalkWindow(IUserInterfaceManager uiManager, DaggerfallBaseWindow window)
@@ -28,9 +26,6 @@ namespace BribeForLocation
         {
             base.SetupButtons();
 
-            TextureReplacement.TryImportImage(bribeButtonEnabledImgName, true, out bribeButtonHighlightedTexture);
-            TextureReplacement.TryImportImage(bribeButtonDisabledImgName, true, out bribeButtonGrayedOutTexture);
-
             buttonBribe = new Button
             {
                 Name = "button_bribeForLocation",
@@ -40,42 +35,57 @@ namespace BribeForLocation
                 ToolTipText = "Offer a bribe to mark a location on your map"
             };
 
+            TextureReplacement.TryImportImage(bribeButtonEnabledImgName, true, out bribeButtonHighlightedTexture);
+            TextureReplacement.TryImportImage(bribeButtonDisabledImgName, true, out bribeButtonGrayedOutTexture);
+
             buttonBribe.BackgroundTexture = bribeButtonGrayedOutTexture;
             buttonBribe.OnMouseClick += OnBribeClickHandler;
 
             mainPanel.Components.Add(buttonBribe);
         }
 
-        void OnBribeClickHandler(BaseScreenComponent sender, Vector2 position)
-        {
-            var talkManager = TalkManager.Instance;
-            if (!IsLocationTopic(CurrentTopic))
-                return;
-
-            currentQuestion = talkManager.GetQuestionText(CurrentTopic, selectedTalkTone);
-
-            string answer = talkManager.BribeNPC(CurrentTopic, bribeSystem);
-
-            SetQuestionAnswerPairInConversationListbox(currentQuestion, answer);
-        }
-
-        bool IsLocationTopic(TalkManager.ListItem topic)
-        {
-            return selectedTalkOption == TalkOption.WhereIs &&
-                selectedTalkCategory == TalkCategory.Location &&
-                topic.IsItem();
-        }
-
         protected override void ListboxTopic_OnSelectItem()
         {
             base.ListboxTopic_OnSelectItem();
-            if (IsLocationTopic(CurrentTopic) && bribeSystem.CanBribe())
+            UpdateBribeButtonTexture();
+        }
+
+        private bool CanBribe()
+        {
+            var topic = listCurrentTopics[listboxTopic.SelectedIndex];
+            return IsBribeableTopic() && bribeSystem.CanBribe(topic);
+
+        }
+
+        private void UpdateBribeButtonTexture()
+        {
+            if (CanBribe())
             {
                 buttonBribe.BackgroundTexture = bribeButtonHighlightedTexture;
             }
             else
             {
                 buttonBribe.BackgroundTexture = bribeButtonGrayedOutTexture;
+            }
+        }
+
+        bool IsBribeableTopic()
+        {
+            return selectedTalkOption == TalkOption.WhereIs &&
+                listCurrentTopics[listboxTopic.SelectedIndex].type == TalkManager.ListItemType.Item;
+        }
+
+        void OnBribeClickHandler(BaseScreenComponent sender, Vector2 position)
+        {
+            if (CanBribe())
+            {
+                var topic = listCurrentTopics[listboxTopic.SelectedIndex];
+                currentQuestion = TalkManager.Instance.GetQuestionText(topic, selectedTalkTone);
+                var currentNpc = BribeableNPCData.FromCurrentNPC();
+                string answer = bribeSystem.GetBribeResponse(currentNpc, topic);
+
+                SetQuestionAnswerPairInConversationListbox(currentQuestion, answer);
+                UpdateBribeButtonTexture();
             }
         }
     }

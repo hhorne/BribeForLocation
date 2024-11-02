@@ -25,8 +25,6 @@ namespace BribeForLocation
 
             mod.LoadSettingsCallback = LoadSettings;
 
-            instance.BribeButtonEnabledTexture = mod.GetAsset<Texture2D>("Textures\\bribe-button-enabled");
-
             mod.IsReady = true;
         }
 
@@ -43,6 +41,7 @@ namespace BribeForLocation
                 ScaleByLevel = modSettings.GetBool("General", "Scale By Level"),
                 AmountToScaleBy = modSettings.GetFloat("General", "Amount To Scale By"),
                 StartingBribeAmount = modSettings.GetInt("General", "Base Bribe Amount"),
+                EnableKnowlegeChecking = modSettings.GetBool("Experimental", "Enable Knowledge Check")
             };
         }
     }
