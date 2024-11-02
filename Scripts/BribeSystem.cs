@@ -15,7 +15,7 @@ public class BribeSystem
         get
         {
             var personality = GameManager.Instance.PlayerEntity.Stats.LivePersonality;
-
+            // Mathf.Lerp(0f, 2.0f, Mathf.InverseLerp(1, 100, personality));
             // Linear scaling from 2.0f to 0.0f
             return 2.0f - (personality - 1) * (2.0f / 99.0f);
         }
@@ -73,9 +73,6 @@ public class BribeSystem
 
     public int GetBribeAmount(TalkManager.ListItem topic)
     {
-        // - Location
-        // - People (assuming quest, maybe there's a premium to this kind of info)
-        // - Work (Not As Cheap, Randomly doesn't yield a "good" response.)
         var s = BribeForLocationMain.Settings;
         int bribeAmount = s.StartingBribeAmount;
 
@@ -130,6 +127,7 @@ public class BribeSystem
         {
             answer = "I know when I'm being setup.";
         }
+
         return answer;
     }
 
