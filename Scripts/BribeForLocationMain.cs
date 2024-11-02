@@ -36,16 +36,16 @@ namespace BribeForLocation
 
         private static void LoadSettings(ModSettings modSettings, ModSettingsChange change)
         {
-            var personalityScalers = modSettings.GetTupleFloat("General", "Personality Scale Amount");
+            var personalityScalers = modSettings.GetTupleFloat("General", "PersonalityScaleAmount");
             Settings = new BribeSettings
             {
-                ScaleByLevel = modSettings.GetBool("General", "Enable Scale By Level"),
-                AmountToScaleBy = modSettings.GetFloat("General", "Level Scale Amount"),
-                StartingBribeAmount = modSettings.GetInt("General", "Base Bribe Amount"),
-                ScaleByPersonality = modSettings.GetBool("General", "Enable Scale By Personality"),
+                StartingBribeAmount = modSettings.GetInt("General", "StartingBribeAmount"),
+                EnableScaleByLevel = modSettings.GetBool("General", "EnableScaleByLevel"),
+                AmountToScaleBy = modSettings.GetFloat("General", "LevelScaleAmount"),
+                ScaleByPersonality = modSettings.GetBool("General", "EnableScaleByPersonality"),
                 PersonalityScaleMin = personalityScalers.First,
                 PersonalityScaleMax = personalityScalers.Second,
-                EnableKnowlegeChecking = modSettings.GetBool("Experimental", "Enable Knowledge Check"),
+                EnableKnowlegeChecking = modSettings.GetBool("Experimental", "EnableKnowledgeCheck"),
             };
         }
     }

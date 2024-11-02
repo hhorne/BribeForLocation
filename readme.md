@@ -10,27 +10,27 @@ Early devlopment. I have not taken compatibility with existing mods into mind ju
 
 ### General
 
-#### Base Bribe Amount
-The starting amount required for a bribe before scaling.
+#### StartingBribeAmount
+The  amount required for a bribe before scaling.
 *Default Value*: 10
 _Min_: 1
 _Max_: 100
 
-#### Enable Scale By level
+#### EnableScaleBylevel
 When enabled, the amount required for bribes scales with the players level.
 *Default Value*: true
 
-#### Level Scale Amount
+#### LevelScaleAmount
 How drastically to scale the bribe amount per level.
 *Default Value*: 0.5
 _Min_: 0
 _Max_: 4
 
-#### Enable Scale By Personality
+#### EnableScaleByPersonality
 Reduce or Increase bribe amounts based on the Personality attribute.
 *Default Value*: true
 
-#### Personality Scale Amount
+#### PersonalityScaleAmount
 Tune how Personality affects bribes. \[0.5 = 100 Personality bribes amounts are halved\] \[2 = 1 Personality doubles the amount\].
 *Default Value*:
 ```
@@ -42,16 +42,16 @@ Tune how Personality affects bribes. \[0.5 = 100 Personality bribes amounts are 
 _Min_: 0
 _Max_: 10
 
-### Additional Fees
+### AdditionalFees
 Add a premium for specialized information.
 
-#### People Fee
+#### PeopleFee
 When asking NPCs about specific people.
 *Default Value*: 20
 _Min_: 0
 _Max_: 200
 
-#### Work Fee
+#### WorkFee
 When asking NPCs about any work.
 *Default Value*: 10
 _Min_: 0
@@ -59,6 +59,6 @@ _Max_: 100
 
 ### Experimental
 
-#### Enable Knowledge Check
+#### EnableKnowledgeCheck
 Enables native NPC knowledge using dotnet reflection to parts of the games code that wouldn't normally be reusable. Well supported on Windows but may not work on all platforms like Android.
 *Default Value*: false

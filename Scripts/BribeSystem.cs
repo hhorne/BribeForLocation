@@ -85,7 +85,7 @@ public class BribeSystem
                 break;
         }
 
-        if (s.ScaleByLevel)
+        if (s.EnableScaleByLevel)
         {
             float scaledMultiplier = 1 + (player.Level * s.AmountToScaleBy);
             bribeAmount = Mathf.RoundToInt(bribeAmount * scaledMultiplier);
