@@ -85,7 +85,7 @@
                 {
                     "Value": false,
                     "Name": "EnableKnowledgeCheck",
-                    "Description": "Enables NPC knowledge checks that use parts of that games code that wouldn't normally be reachable. Uses dotnet reflection, may not run correctly on all paltforms.",
+                    "Description": "Sometimes NPCs might not know where something is. Uses parts of that games code that wouldn't normally be reachable. Uses dotnet reflection, may not run correctly on all paltforms.",
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 }

@@ -60,5 +60,5 @@ _Max_: 100
 ### Experimental
 
 #### EnableKnowledgeCheck
-Enables native NPC knowledge using dotnet reflection to parts of the games code that wouldn't normally be reusable. Well supported on Windows but may not work on all platforms like Android.
+Sometimes NPCs might not know where something is. Uses parts of that games code that wouldn't normally be reachable. Uses dotnet reflection, may not run correctly on all paltforms.
 *Default Value*: false
