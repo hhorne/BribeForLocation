@@ -5,25 +5,21 @@ using DaggerfallWorkshop.Game;
 
 public class BribeSystem
 {
-    readonly PlayerEntity player;
+    // not the REAL the attributeMax but right for our scaling formula
+    const int attributeMax = 100;
+    const int attributeMin = 1;
+
+    // don't think I want this in settings, maybe build a dictionary of regions
+    // and have that influence how easy/hard it is.
     float guardBribeCriticalFail = 0.1f;
     float guardBribeDifficulty = 1.2f;
-    float personalityBonus => GameManager.Instance.PlayerEntity.Stats.LivePersonality * 0.01f;
 
-    float personalityScale
-    {
-        get
-        {
-            var personality = GameManager.Instance.PlayerEntity.Stats.LivePersonality;
-            // Mathf.Lerp(0f, 2.0f, Mathf.InverseLerp(1, 100, personality));
-            // Linear scaling from 2.0f to 0.0f
-            return 2.0f - (personality - 1) * (2.0f / 99.0f);
-        }
-    }
+    PlayerEntity player => GameManager.Instance.PlayerEntity;
+    int personality => player.Stats.LivePersonality;
+    float personalityBonus => player.Stats.LivePersonality * 0.01f;
 
-    public BribeSystem(PlayerEntity player)
+    public BribeSystem()
     {
-        this.player = player;
     }
 
     public bool CanBribe(TalkManager.ListItem topic) => GetBribeAmount(topic) < player.GoldPieces;
@@ -58,7 +54,7 @@ public class BribeSystem
                     answer = TalkManager.Instance.GetAnswerWhereIs(topic);
                     break;
                 case TalkManager.NPCKnowledgeAboutItem.KnowsAboutItem:
-                default:
+                default: // Default handles the case when the Feature doesn't work
                     answer = GetMarkMapResponse(topic);
                     break;
             }
@@ -76,6 +72,7 @@ public class BribeSystem
         var s = BribeForLocationMain.Settings;
         int bribeAmount = s.StartingBribeAmount;
 
+        // add premiums before scaling
         switch (topic.questionType)
         {
             case TalkManager.QuestionType.Work:
@@ -90,13 +87,29 @@ public class BribeSystem
 
         if (s.ScaleByLevel)
         {
-            float leveledMultiplier = 1 + (player.Level * s.AmountToScaleBy);
-            bribeAmount = Mathf.RoundToInt(bribeAmount * leveledMultiplier);
+            float scaledMultiplier = 1 + (player.Level * s.AmountToScaleBy);
+            bribeAmount = Mathf.RoundToInt(bribeAmount * scaledMultiplier);
         }
 
-        bribeAmount = Mathf.RoundToInt(bribeAmount * personalityScale);
+        if (s.ScaleByPersonality)
+        {
+            float scaledMultiplier = GetPersonalityScaler();
+            bribeAmount = Mathf.RoundToInt(bribeAmount * scaledMultiplier);
+        }
 
         return bribeAmount;
+    }
+
+    // Inverse Linear scaling by Personality ex: from 0f, to 2f
+    // Personality 100 = scale 0f, i.e. it multiplies bribes to be free.
+    // Personality 1 = scale 2, i.e. it doubles the cost of a bribe.
+    public float GetPersonalityScaler()
+    {
+        var s = BribeForLocationMain.Settings;
+        float from = s.PersonalityScaleMin;
+        float to = s.PersonalityScaleMax;
+        float scaledValue = (to - from) * ((personality - attributeMin) / (attributeMax - attributeMin)) + from;
+        return scaledValue;
     }
 
     public bool TakeBribe(TalkManager.ListItem topic)

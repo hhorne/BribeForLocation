@@ -8,6 +8,7 @@ namespace BribeForLocation
 {
     public class BribeableTalkWindow : DaggerfallTalkWindow
     {
+        readonly string defaultToolTipText = "Offer a bribe to mark a location on your map";
         protected Button buttonBribe;
         protected string bribeButtonEnabledImgName = "bribe-button-enabled.bmp";
         protected string bribeButtonDisabledImgName = "bribe-button-disabled.bmp";
@@ -19,7 +20,7 @@ namespace BribeForLocation
         public BribeableTalkWindow(IUserInterfaceManager uiManager, DaggerfallBaseWindow window)
             : base(uiManager, window)
         {
-            bribeSystem = new BribeSystem(GameManager.Instance.PlayerEntity);
+            bribeSystem = new BribeSystem();
         }
 
         protected override void SetupButtons()
@@ -32,7 +33,7 @@ namespace BribeForLocation
                 Position = new Vector2(118, 136),
                 Size = new Vector2(67, 18),
                 ToolTip = defaultToolTip,
-                ToolTipText = "Offer a bribe to mark a location on your map"
+                ToolTipText = defaultToolTipText
             };
 
             TextureReplacement.TryImportImage(bribeButtonEnabledImgName, true, out bribeButtonHighlightedTexture);
@@ -50,21 +51,28 @@ namespace BribeForLocation
             UpdateBribeButtonTexture();
         }
 
-        private bool CanBribe()
-        {
-            var topic = listCurrentTopics[listboxTopic.SelectedIndex];
-            return IsBribeableTopic() && bribeSystem.CanBribe(topic);
+        private bool CanBribe() => IsBribeableTopic() && CanAffordBribe();
 
-        }
+        private bool CanAffordBribe() => bribeSystem.CanBribe(listCurrentTopics[listboxTopic.SelectedIndex]);
 
         private void UpdateBribeButtonTexture()
         {
             if (CanBribe())
             {
                 buttonBribe.BackgroundTexture = bribeButtonHighlightedTexture;
+                buttonBribe.ToolTipText = defaultToolTipText;
             }
             else
             {
+                if (!IsBribeableTopic())
+                {
+                    buttonBribe.ToolTipText = "You don't think coin will get you anything on this topic.";
+                }
+                else if (!CanAffordBribe())
+                {
+                    buttonBribe.ToolTipText = "You don't have enough coin.";
+                }
+
                 buttonBribe.BackgroundTexture = bribeButtonGrayedOutTexture;
             }
         }

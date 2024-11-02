@@ -13,10 +13,12 @@ public static class ExperimentalFeatures
         {
             npcKnowledge = (TalkManager.NPCKnowledgeAboutItem)typeof(TalkManager)
                 .GetMethod(nameof(GetNPCKnowledgeAboutItem), bindingFlags)
-                .Invoke(TalkManager.Instance, new object[] { topic });
+                .Invoke(TalkManager.Instance, new[] { topic });
         }
         catch (Exception e)
         {
+            // NotSet is how we'll indicate to the consuming BribeSystem that this didn't
+            // really work out and it can't use this.
             npcKnowledge = TalkManager.NPCKnowledgeAboutItem.NotSet;
             Debug.Log($"Exception in {nameof(ExperimentalFeatures)}.{nameof(GetNPCKnowledgeAboutItem)}: {e.Message}");
         }

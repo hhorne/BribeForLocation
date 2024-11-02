@@ -8,21 +8,21 @@
                 {
                     "Name": "Base Bribe Amount",
                     "Description": "The starting amount required for a bribe before scaling.",
-                    "Value": 5,
-                    "Min": 5,
-                    "Max": 50,
+                    "Value": 10,
+                    "Min": 1,
+                    "Max": 100,
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
                 },
                 {
-                    "Name": "Scale By Level",
-                    "Description": "Amount required for bribes scales with the players level.",
+                    "Name": "Enable Scale By Level",
+                    "Description": "When enabled, the amount required for bribes scales with the players level.",
                     "Value": true,
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
                 },
                 {
-                    "Name": "Amount To Scale By",
+                    "Name": "Level Scale Amount",
                     "Description": "How drastically to scale the bribe amount per level.",
                     "Value": 0.5,
                     "Min": 0,
@@ -30,36 +30,48 @@
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
                 },
-                /*{
-                    "Name": "Influenced By Personality",
-                    "Description": "[Not Implemented] Personality can decrease (or increase) the amount required for a bribe.",
-                    "Value": false,
+                {
+                    "Name": "Enable Scale By Personality",
+                    "Description": "Reduce or Increase bribe amounts based on the Personality attribute.",
+                    "Value": true,
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
-                }*/
+                },
+                {
+                    "Name": "Personality Scale Amount",
+                    "Description": "Tune how Personality affects bribes. [0.5 = 100 Personality bribes amounts are halved] [2 = 1 Personality doubles the amount].",
+                    "Value": {
+                        "First": 0.5,
+                        "Second": 2
+                    },
+                    "Min": 0,
+                    "Max": 10,
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TupleFloatKey"
+                }
             ],
             "$version": "v1"
         },
         {
             "Name": "Additional Fees",
             "IsAdvanced": false,
-            "Description": "Adds a premium for more specialized information",
+            "Description": "Add a premium for specialized information.",
             "Keys": [
                 {
                     "Name": "People Fee",
                     "Description": "When asking NPCs about specific people.",
-                    "Value": 5,
+                    "Value": 20,
                     "Min": 0,
-                    "Max": 50,
+                    "Max": 200,
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
                 },
                 {
                     "Name": "Work Fee",
                     "Description": "When asking NPCs about any work.",
-                    "Value": 5,
+                    "Value": 10,
                     "Min": 0,
-                    "Max": 50,
+                    "Max": 100,
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderIntKey"
                 }
@@ -72,7 +84,7 @@
             "Keys": [
                 {
                     "Name": "Enable Knowledge Check",
-                    "Description": "Enables native NPC knowledge using dotnet reflection to parts of the games code that wouldn't normally be reusable.",
+                    "Description": "Enables native NPC knowledge using dotnet reflection to parts of the games code that wouldn't normally be reusable. Well supported on Windows but may not work on all platforms like Android.",
                     "Value": false,
                     "$version": "v1",
                     "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
