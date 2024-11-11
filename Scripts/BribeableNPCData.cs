@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static DaggerfallWorkshop.Game.TalkManager;
 
 public class BribeableNPCData
 {
@@ -20,20 +21,13 @@ public class BribeableNPCData
         FactionFile.GuildGroups.HolyOrder,
     };
 
-    public enum NPCTypes
-    {
-        None,
-        Mobile,
-        Static
-    }
-
     public FactionFile.SocialGroups SocialGroup { get; set; }
     public FactionFile.GuildGroups GuildGroup { get; set; }
     public FactionFile.FactionData FactionData { get; set; }
     public Races Race { get; set; }
     public bool IsSpyMaster { get; set; }
     public bool IsGuard { get; set; }
-    public NPCTypes NPCType { get; set; }
+    public NPCType NPCType { get; set; }
 
     public bool IsNoble => SocialGroup == FactionFile.SocialGroups.Nobility;
 
@@ -65,7 +59,7 @@ public class BribeableNPCData
 
         var npcData = new BribeableNPCData
         {
-            NPCType = NPCTypes.Static,
+            NPCType = NPCType.Static,
             SocialGroup = factionData.sgroup < 5
                 ? (FactionFile.SocialGroups)factionData.sgroup
                 : FactionFile.SocialGroups.Merchants,
@@ -86,7 +80,7 @@ public class BribeableNPCData
 
         return new BribeableNPCData
         {
-            NPCType = NPCTypes.Mobile,
+            NPCType = NPCType.Mobile,
             IsGuard = npc.IsGuard,
             SocialGroup = FactionFile.SocialGroups.Commoners,
             GuildGroup = FactionFile.GuildGroups.None,

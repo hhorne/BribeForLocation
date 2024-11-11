@@ -11,12 +11,12 @@ public class BribeSystem
 
     // don't think I want this in settings, maybe build a dictionary of regions
     // and have that influence how easy/hard it is.
-    float guardBribeCriticalFail = 0.1f;
+    float guardBribeCriticalFail = 0.3f;
     float guardBribeDifficulty = 1.2f;
 
     PlayerEntity player => GameManager.Instance.PlayerEntity;
     int personality => player.Stats.LivePersonality;
-    float personalityBonus => player.Stats.LivePersonality * 0.01f;
+    float personalityBonus => player.Stats.LivePersonality * 0.008f;
 
     public BribeSystem()
     {
@@ -43,11 +43,12 @@ public class BribeSystem
         {
             answer = AttemptBribeOnGuard(topic);
         }
-        else if (BribeForLocationMain.Settings.EnableKnowlegeChecking)
+        else
         {
             // see if i add entries into the tokens(??) in the subrecords(??)
             // so that i can expand custom macros when bribes are rejected.
-            var result = ExperimentalFeatures.GetNPCKnowledgeAboutItem(topic);
+            //var result = ExperimentalFeatures.GetNPCKnowledgeAboutItem(topic);
+            var result = BribeableTalkManager.Instance.GetNPCKnowledgeAboutItem(topic, npc);
             switch (result)
             {
                 case TalkManager.NPCKnowledgeAboutItem.DoesNotKnowAboutItem:
@@ -58,10 +59,6 @@ public class BribeSystem
                     answer = GetMarkMapResponse(topic);
                     break;
             }
-        }
-        else
-        {
-            answer = GetMarkMapResponse(topic);
         }
 
         return answer;
@@ -126,15 +123,15 @@ public class BribeSystem
     string AttemptBribeOnGuard(TalkManager.ListItem topic)
     {
         string answer;
-        var roll = Random.Range(0.0f, 1.5f) + personalityBonus;
-        if (roll >= guardBribeDifficulty)
-        {
-            answer = GetMarkMapResponse(topic);
-        }
-        else if (roll <= guardBribeCriticalFail)
+        var roll = Random.Range(0.0f, 1.5f);
+        if (roll <= guardBribeCriticalFail)
         {
             TakeBribe(topic);
             answer = "Out of here before I box your ears and haul you in, welp!";
+        }
+        else if (roll + personalityBonus >= guardBribeDifficulty)
+        {
+            answer = GetMarkMapResponse(topic);
         }
         else
         {

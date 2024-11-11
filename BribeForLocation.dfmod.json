@@ -17,5 +17,12 @@
         "Assets/Game/Mods/BribeForLocation/Scripts/NobleResponses.cs",
         "Assets/Game/Mods/BribeForLocation/Scripts/ExperimentalFeatures.cs",
         "Assets/Game/Mods/BribeForLocation/Scripts/BribeForLocationMain.cs"
+    ],
+    "Dependencies": [
+        {
+            "Name": "advanced dialogue",
+            "IsOptional": true,
+            "IsPeer": false
+        }
     ]
 }

@@ -45,7 +45,6 @@ namespace BribeForLocation
                 ScaleByPersonality = modSettings.GetBool("General", "EnableScaleByPersonality"),
                 PersonalityScaleMin = personalityScalers.First,
                 PersonalityScaleMax = personalityScalers.Second,
-                EnableKnowlegeChecking = modSettings.GetBool("Experimental", "EnableKnowledgeCheck"),
             };
         }
     }

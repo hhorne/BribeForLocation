@@ -88,9 +88,9 @@ namespace BribeForLocation
             if (CanBribe())
             {
                 var topic = listCurrentTopics[listboxTopic.SelectedIndex];
-                currentQuestion = TalkManager.Instance.GetQuestionText(topic, selectedTalkTone);
                 var currentNpc = BribeableNPCData.FromCurrentNPC();
                 string answer = bribeSystem.GetBribeResponse(currentNpc, topic);
+                currentQuestion = TalkManager.Instance.GetQuestionText(topic, selectedTalkTone);
 
                 SetQuestionAnswerPairInConversationListbox(currentQuestion, answer);
                 UpdateBribeButtonTexture();
