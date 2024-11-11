@@ -15,14 +15,8 @@
         "Assets/Game/Mods/BribeForLocation/Scripts/BribeSystem.cs",
         "Assets/Game/Mods/BribeForLocation/Scripts/BribeSettings.cs",
         "Assets/Game/Mods/BribeForLocation/Scripts/NobleResponses.cs",
-        "Assets/Game/Mods/BribeForLocation/Scripts/ExperimentalFeatures.cs",
-        "Assets/Game/Mods/BribeForLocation/Scripts/BribeForLocationMain.cs"
+        "Assets/Game/Mods/BribeForLocation/Scripts/BribeForLocationMain.cs",
+        "Assets/Game/Mods/BribeForLocation/Scripts/BribeableTalkManager.cs"
     ],
-    "Dependencies": [
-        {
-            "Name": "advanced dialogue",
-            "IsOptional": true,
-            "IsPeer": false
-        }
-    ]
+    "Dependencies": []
 }
